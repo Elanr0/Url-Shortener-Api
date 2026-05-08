@@ -34,3 +34,4 @@ C:\Users\elanur.karaca\Desktop\UrlShortener\obj\Debug\net10.0\ref\UrlShortener.d
 C:\Users\elanur.karaca\Desktop\UrlShortener\bin\Debug\net10.0\Swashbuckle.AspNetCore.Swagger.dll
 C:\Users\elanur.karaca\Desktop\UrlShortener\bin\Debug\net10.0\Swashbuckle.AspNetCore.SwaggerGen.dll
 C:\Users\elanur.karaca\Desktop\UrlShortener\bin\Debug\net10.0\Swashbuckle.AspNetCore.SwaggerUI.dll
+C:\Users\elanur.karaca\Desktop\UrlShortener\obj\Debug\net10.0\UrlShortener.sourcelink.json

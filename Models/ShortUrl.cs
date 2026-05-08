@@ -11,3 +11,4 @@ public class ShortUrl
     public DateTime CreatedAt { get; set;} = DateTime.Now;
 
 }
+
