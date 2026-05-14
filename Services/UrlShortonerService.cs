@@ -1,37 +1,43 @@
+using Microsoft.EntityFrameworkCore;
+using UrlShortener.Data;
 using UrlShortener.Models;
 
 namespace UrlShortener.Services;
 public class UrlShortenerService
 {
-    private readonly List<ShortUrl> _urls= new();
+    private readonly AppDbContext _context;
+
+    public UrlShortenerService(AppDbContext context)
+    {
+        
+      _context = context;
+
+    }
 
     public ShortUrl CreateShortUrl(string originalUrl)
     {
-        
         var shortUrl = new ShortUrl
         {
-            Id = _urls.Count + 1,
             OriginalUrl = originalUrl,
             ShortCode = GenerateShortCode(),
+            CreatedAt = DateTime.Now
         };
-
-        _urls.Add(shortUrl);
+        _context.ShortUrls.Add(shortUrl);
+        _context.SaveChanges();
         return shortUrl;
     }
 
     public ShortUrl? GetShortUrl(string shortCode)
     {
-       return _urls.FirstOrDefault(x => x. ShortCode == shortCode); 
+        return _context.ShortUrls.FirstOrDefault(x => x.ShortCode == shortCode);
     }
-
     public List<ShortUrl> GetAll()
     {
-       return _urls;
+        return _context.ShortUrls.ToList();
     }
 
     private string GenerateShortCode()
     {
         return Guid.NewGuid().ToString()[..6];
     }
-
 }

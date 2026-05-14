@@ -1,3 +1,5 @@
+using Microsoft.EntityFrameworkCore;
+using UrlShortener.Data;
 using UrlShortener.Models;
 using UrlShortener.Services;
 
@@ -6,7 +8,12 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddSingleton<UrlShortenerService>();
+builder.Services.AddDbContext<AppDbContext>(options =>
+{
+    options.UseSqlite("Data Source=urlshortener.db");
+});
+
+builder.Services.AddScoped<UrlShortenerService>();
 
 var app = builder.Build();
 
@@ -46,7 +53,7 @@ app.MapGet("/{shortCode}", (string shortCode, UrlShortenerService service) =>
 
     if (shortUrl is null)
     {
-        return Results.NotFound("Böyle bir kısa link bulunamadı.");
+        return Results.NotFound("Böyle bir kisa link bulunamadi.");
     }
 
     return Results.Redirect(shortUrl.OriginalUrl);
