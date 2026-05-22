@@ -9,21 +9,31 @@ public class UrlShortenerService
 
     public UrlShortenerService(AppDbContext context)
     {
-        
       _context = context;
-
     }
 
-    public ShortUrl CreateShortUrl(string originalUrl)
+    public ShortUrl CreateShortUrl(string originalUrl, int userId, string? customShortCode)
     {
+        var ShortCode = string.IsNullOrEmpty(customShortCode) ? GenerateShortCode() : customShortCode;
+
+        var shortCodeExists = _context.ShortUrls.Any(x => x.ShortCode == ShortCode);
+
+        if (shortCodeExists)
+        {
+            throw new Exception("Bu özel kısa kod zaten kullanılıyor. Lütfen başka bir kod deneyin.");
+        }
+
         var shortUrl = new ShortUrl
         {
             OriginalUrl = originalUrl,
-            ShortCode = GenerateShortCode(),
-            CreatedAt = DateTime.Now
+            ShortCode = string.IsNullOrEmpty(customShortCode) ? GenerateShortCode() : customShortCode,
+            CreatedAt = DateTime.Now,
+            UserId = userId
+            
         };
         _context.ShortUrls.Add(shortUrl);
         _context.SaveChanges();
+        
         return shortUrl;
     }
 
@@ -39,5 +49,15 @@ public class UrlShortenerService
     private string GenerateShortCode()
     {
         return Guid.NewGuid().ToString()[..6];
+    }
+
+    public List<ShortUrl> GetUserUrls(int userId)
+    {
+        return _context.ShortUrls.Where(x=> x.UserId == userId).ToList();
+    }
+
+    public void SaveChanges()
+    {
+        _context.SaveChanges();
     }
 }

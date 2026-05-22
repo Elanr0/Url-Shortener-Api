@@ -9,6 +9,7 @@ public class AppDbContext : DbContext
     {
     }
 
-    public DbSet<ShortUrl> ShortUrls { get; set;}
+    public DbSet<ShortUrl> ShortUrls { get; set; }
+    public DbSet<User> Users { get; set; }
 }
 
