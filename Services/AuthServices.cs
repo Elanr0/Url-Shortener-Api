@@ -1,3 +1,5 @@
+using System.Security.Cryptography;
+using System.Text;
 using UrlShortener.Data;
 using UrlShortener.Models;
 using UrlShortener.Requests;
@@ -25,7 +27,7 @@ public class AuthServices
         {
             Email= request.Email,
             PhoneNumber = request.PhoneNumber,
-            PasswordHash= request.Password,
+            PasswordHash= HashPassword(request.Password),
             CreatedAt= DateTime.Now,
         };
 
@@ -46,13 +48,23 @@ public class AuthServices
             throw new Exception("Kullanıcı bulunamadı.");
         }
 
-        if (user.PasswordHash != request.Password)
+        var hashedPassword = HashPassword(request.Password);
+
+        if (user.PasswordHash != hashedPassword)
         {
             throw new Exception("Şifre yanlış.");
         }
 
         return user;
         
+    }
+
+    private string HashPassword(string password)
+    {
+        using var sha256 = SHA256.Create();
+        var bytes = Encoding.UTF8.GetBytes(password);
+        var hashBytes = sha256.ComputeHash(bytes);
+        return Convert.ToBase64String(hashBytes);
     }
 
 }
