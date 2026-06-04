@@ -1,141 +1,132 @@
 # URL Shortener API
 
-A simple URL shortener API built with ASP.NET Core Minimal API.
-
-## About the Project
-
-This project is a beginner-friendly backend API that shortens long URLs and redirects users to the original URL using a generated short code.
-
-The main purpose of this project is to understand the basics of backend development, API endpoints, service structure, dependency injection, and Swagger testing.
-
-## Technologies Used
-
-- C#
-- ASP.NET Core Minimal API
-- Swagger / Swashbuckle
-- .NET
-- Visual Studio Code
-
-## Project Structure
-
-```txt
-UrlShortener
-├── Models
-│   ├── ShortUrl.cs
-│   └── CreateShortUrlRequest.cs
-├── Services
-│   └── UrlShortenerService.cs
-├── Program.cs
-├── appsettings.json
-└── UrlShortener.csproj
-```
+A URL shortening API built with ASP.NET Core, Entity Framework Core, SQLite, and JWT Authentication.
 
 ## Features
 
-- Create a short URL from a long URL
-- Redirect to the original URL using a short code
-- List all shortened URLs
-- Test endpoints with Swagger UI
+- User Registration
+- User Login
+- JWT Authentication
+- Password Hashing (SHA256)
+- Create Short URLs
+- Custom Short Codes
+- URL Redirection
+- Click Count Tracking
+- User-Specific URL Management
+- URL History
+- SQLite Database
+- Entity Framework Core Migrations
+- Swagger UI Documentation
 
-## Endpoints
+## Technologies
 
-### GET /
+- ASP.NET Core
+- C#
+- Entity Framework Core
+- SQLite
+- JWT Authentication
+- Swagger / OpenAPI
 
-Checks if the API is running.
+## Project Structure
 
-```txt
-GET http://localhost:5000/
+```text
+UrlShortener
+│
+├── Data
+│   └── AppDbContext.cs
+│
+├── Models
+│   ├── User.cs
+│   └── ShortUrl.cs
+│
+├── Requests
+│   ├── RegisterRequest.cs
+│   ├── LoginRequest.cs
+│   └── CreateShortUrlRequest.cs
+│
+├── Services
+│   ├── AuthServices.cs
+│   ├── TokenService.cs
+│   └── UrlShortenerService.cs
+│
+└── Program.cs
 ```
 
----
+## Authentication
 
-### POST /shorten
+Users can register and log in using:
 
-Creates a shortened URL.
+- Email Address
+- Phone Number
 
-Request body:
+After a successful login, the API generates a JWT token.
 
-```json
-{
-  "originalUrl": "https://google.com"
-}
+Protected endpoints require authentication using:
+
+```text
+Bearer <your_token>
 ```
 
-Example response:
+## API Endpoints
 
-```json
-{
-  "originalUrl": "https://google.com",
-  "shortCode": "5711db",
-  "shortUrl": "http://localhost:5000/5711db"
-}
+### Authentication
+
+```http
+POST /auth/register
+POST /auth/login
 ```
 
----
+### URL Management
 
-### GET /{shortCode}
-
-Redirects the user to the original URL.
-
-Example:
-
-```txt
-GET http://localhost:5000/5711db
+```http
+POST /shorten
+GET /users/{userId}/urls
+GET /{shortCode}
 ```
 
----
+## Database
 
-### GET /urls/all
+SQLite is used as the database provider.
 
-Returns all shortened URLs stored in memory.
+Main tables:
 
-```txt
-GET http://localhost:5000/urls/all
+### Users
+
+```text
+Id
+Email
+PhoneNumber
+PasswordHash
+CreatedAt
 ```
 
-## How to Run
+### ShortUrls
 
-Clone the project:
-
-```bash
-git clone https://github.com/your-username/url-shortener-api.git
+```text
+Id
+OriginalUrl
+ShortCode
+CreatedAt
+ClickCount
+UserId
 ```
 
-Go to the project folder:
+## Security
 
-```bash
-cd url-shortener-api
-```
+- JWT Authentication
+- Password Hashing
+- User-Based Authorization
+- Protected Endpoints
 
-Run the project:
+## Future Improvements
 
-```bash
-dotnet run
-```
+- Refresh Tokens
+- URL Update
+- URL Delete
+- Admin Panel
+- Analytics Dashboard
+- Frontend Application
 
-Open Swagger UI:
+## Author
 
-```txt
-http://localhost:5000/swagger
-```
-
-## Current Limitations
-
-- Data is stored in memory, so records are deleted when the application stops.
-- There is no database yet.
-- Short code collision control is not fully handled.
-- There is no user authentication.
-- There is no click tracking yet.
-
-## Planned Improvements
-
-- Add database support with SQLite and Entity Framework Core
-- Add click count tracking
-- Add custom short codes
-- Add expiration date for short links
-- Improve error responses
-- Add a simple frontend interface
-
-## Project Status
-
-This project is currently in development.
+Elanur Karaca
